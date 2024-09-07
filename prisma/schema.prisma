@@ -20,10 +20,10 @@ model User {
   updateAt DateTime @updatedAt
 
   name String
-  email String
+  email String @unique
   hash String
-  bio String
 
+  bio String?
   facebookLink String?
   twitterLink String?
   otp String?
