@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as argon2 from 'argon2';
-import { AuthDto, UserDto } from './dto';
+import { Login, Signup } from './dto';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -16,11 +16,11 @@ export class AuthService {
         private jwt: JwtService
     ) {}
 
-    async login(authDto: AuthDto) {
+    async login(data: Login) {
         // find the user by email
         const user = await this.prismaService.user.findUnique({
             where: {
-                email: authDto.email
+                email: data.email
             }
         })
         // if the user is not found, return forbidden exception
@@ -28,7 +28,7 @@ export class AuthService {
             throw new ForbiddenException('Invalid credentials');
         }
         // verify the password
-        const valid = await argon2.verify(user.hash, authDto.password);
+        const valid = await argon2.verify(user.hash, data.password);
         // if the password is invalid, return null
         if (!valid) {
             throw new ForbiddenException('Invalid credentials');
@@ -37,20 +37,18 @@ export class AuthService {
         return {access_token};
     }
     
-    async signup(userDto: UserDto) {
+    async signup(data: Signup) {
         try {
             // hash the password
-            const hash = await argon2.hash(userDto.password);
-            delete userDto.password;
+            const hash = await argon2.hash(data.password);
+            delete data.password;
             // save the user to the database
             const user = await this.prismaService.user.create({
                 data: {
-                    ...userDto,
+                    ...data,
                     hash
                 }
-            })
-
-
+            });
             const access_token = await this.signToken(user.id, user.email);
             return {access_token};
         } catch(err) {
