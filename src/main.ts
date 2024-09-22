@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { PrismaExceptionFilter } from './exception-filters/prisma.exception';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -9,6 +11,12 @@ async function bootstrap() {
     whitelist: true
   }));
 
+
+  app.useGlobalFilters(new PrismaExceptionFilter());
+
+  const configService = new ConfigService();
+
+  const port = configService.get('PORT') || 3000;
 
   const config = new DocumentBuilder()
     .addBearerAuth(undefined, 'default')
@@ -18,7 +26,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document, {
-
     swaggerOptions: {
       authAction: {
         default: {
@@ -30,13 +37,13 @@ async function bootstrap() {
             scheme: 'bearer',
             bearerFormat: 'JWT',
           },
-          value: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NmVhODE0OTI3ZWFiNzJhODY0ZjAxZWQiLCJlbWFpbCI6Im1lbW9AZ21haWwuY29tIiwiaWF0IjoxNzI2NzM3NzI5LCJleHAiOjE3MjY4MjQxMjl9.ZBoqkb4CvLqEOywDizX-iiq1hZYiupdni_IZki5twi8',
+          value: configService.get('TOKEN'),
         },
       },
     },
   });
 
 
-  await app.listen(8000);
+  await app.listen(port);
 }
 bootstrap();
