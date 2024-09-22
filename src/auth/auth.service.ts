@@ -5,7 +5,6 @@ import { LoginDto, SignupDto } from './dto';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
-
 @Injectable()
 export class AuthService {
     constructor(
