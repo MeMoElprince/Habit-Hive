@@ -13,14 +13,14 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles(Role.User)
-  @ApiBearerAuth('default')
-  @ApiOperation({ summary: 'Get my data', description: 'Get my profile' })
-  @Get('me')
-  getMe(@GetUser() user: User) {
-    return user;
-  }
+          @UseGuards(AuthGuard('jwt'), RolesGuard)
+          @Roles(Role.User)
+          @ApiBearerAuth('default')
+          @ApiOperation({ summary: 'Get my data', description: 'Get my profile' })
+          @Get('me')
+          getMe(@GetUser() user: User) {
+            return user;
+          }
 
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth('default')

@@ -83,7 +83,7 @@
     "testEnvironment": "node"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "npm run format"
+    "**/*": "prettier --write . --ignore-unknown --allow-empty"
   },
   "husky": {
     "hooks": {
