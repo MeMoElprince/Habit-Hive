@@ -5,9 +5,6 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "prettier --write"
-  },
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -84,5 +81,13 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": "prettier --write"
   }
 }
