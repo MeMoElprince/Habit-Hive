@@ -82,8 +82,8 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   },
-    "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "prettier --write"
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": "format"
   },
   "husky": {
     "hooks": {
