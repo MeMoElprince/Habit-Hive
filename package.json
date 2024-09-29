@@ -83,7 +83,7 @@
     "testEnvironment": "node"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "format"
+    "*.{js,jsx,ts,tsx}": "npm run format"
   },
   "husky": {
     "hooks": {
