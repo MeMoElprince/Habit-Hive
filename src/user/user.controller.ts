@@ -11,27 +11,28 @@ import { UserService } from './user.service';
 
 @Controller('users')
 export class UserController {
+  constructor(private userService: UserService) {}
 
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.User)
+  @ApiBearerAuth('default')
+  @ApiOperation({ summary: 'Get my data', description: 'Get my profile' })
+  @Get('me')
+  getMe(@GetUser() user: User) {
+    return user;
+  }
 
-    constructor(
-        private userService: UserService
-    ) {}
-
-    @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles(Role.User)
-    @ApiBearerAuth('default')
-    @ApiOperation({ summary: 'Get my data', description: 'Get my profile' })
-    @Get('me')
-    getMe(@GetUser() user: User) {
-        return user;
-    }
-
-
-    @UseGuards(AuthGuard('jwt'))
-    @ApiBearerAuth('default')
-    @ApiOperation({ summary: 'Update my data', description: 'Each user update his profile' })
-    @Patch('me')
-    async updateMe(@GetUser('id') id: number, @Body() updateUserDto: UpdateUserDto) {
-        return await this.userService.update(id, updateUserDto);
-    }
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('default')
+  @ApiOperation({
+    summary: 'Update my data',
+    description: 'Each user update his profile',
+  })
+  @Patch('me')
+  async updateMe(
+    @GetUser('id') id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return await this.userService.update(id, updateUserDto);
+  }
 }

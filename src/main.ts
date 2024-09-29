@@ -7,10 +7,11 @@ import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true
-  }));
-
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+    }),
+  );
 
   app.useGlobalFilters(new PrismaExceptionFilter());
 
@@ -42,7 +43,6 @@ async function bootstrap() {
       },
     },
   });
-
 
   await app.listen(port);
 }
