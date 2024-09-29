@@ -83,6 +83,6 @@
     "testEnvironment": "node"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" --allow empty"
+    "*.{js,jsx,ts,tsx}": "npm run format"
   }
 }
