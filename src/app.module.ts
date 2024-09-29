@@ -6,11 +6,11 @@ import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
-                  PrismaModule,
-                  AuthModule,
-                  ConfigModule.forRoot({ isGlobal: true }),
-                  UserModule,
-  ],
+                        PrismaModule,
+                        AuthModule,
+                        ConfigModule.forRoot({ isGlobal: true }),
+                        UserModule,
+        ],
   controllers: [],
   providers: [],
 })
