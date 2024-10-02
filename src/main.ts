@@ -13,6 +13,8 @@ async function bootstrap() {
     }),
   );
 
+  app.setGlobalPrefix('api');
+
   app.useGlobalFilters(new PrismaExceptionFilter());
 
   const configService = new ConfigService();
