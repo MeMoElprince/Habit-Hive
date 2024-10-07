@@ -2,10 +2,10 @@ import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { User } from '@prisma/client';
-import { GetUser } from 'src/auth/decorator';
-import { Roles } from 'src/auth/decorator/roles.decorator';
-import { Role } from 'src/auth/enum/role.enum';
-import { RolesGuard } from 'src/auth/guard/roles.guard';
+import { GetUser } from '../auth/decorator';
+import { Roles } from '../auth/decorator/roles.decorator';
+import { Role } from '../auth/enum/role.enum';
+import { RolesGuard } from '../auth/guard/roles.guard';
 import { UpdateUserDto } from './dto';
 import { UserService } from './user.service';
 
