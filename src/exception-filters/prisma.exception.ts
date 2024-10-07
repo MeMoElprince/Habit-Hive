@@ -14,7 +14,6 @@ export class PrismaExceptionFilter implements ExceptionFilter {
 
     switch (exception.code) {
       case 'P2025': {
-        console.log('P2025 EXCEPTION');
         response.status(404).json({
           statusCode: 404,
           message: exception.message,
@@ -31,7 +30,6 @@ export class PrismaExceptionFilter implements ExceptionFilter {
       }
 
       default: {
-        console.log(exception);
         response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
           message: 'Internal server error',
