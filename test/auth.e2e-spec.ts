@@ -3,6 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
+import { PrismaExceptionFilter } from '../src/exception-filters/prisma.exception';
 
 describe('AUth Controller (e2e)', () => {
   let app: INestApplication;
@@ -15,6 +16,7 @@ describe('AUth Controller (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.useGlobalFilters(new PrismaExceptionFilter());
     await app.init();
 
     // Inject PrismaService
@@ -38,7 +40,7 @@ describe('AUth Controller (e2e)', () => {
       .expect(201);
   });
 
-  it('(POST) Sign Up', () => {
+  it('(POST) Sign Up with duplicate email', () => {
     return request(app.getHttpServer())
       .post('/auth/signup')
       .send({
@@ -49,9 +51,9 @@ describe('AUth Controller (e2e)', () => {
         facebookLink: 'https://www.facebook.com',
         twitterLink: 'https://www.twitter.com',
       })
-      .expect(500)
+      .expect(400)
       .then((res) => {
-        expect(res.body.message).toEqual('Internal server error');
+        expect(res.body.message).toEqual('Credentials already taken on email');
       });
   });
 
@@ -68,7 +70,7 @@ describe('AUth Controller (e2e)', () => {
       });
   });
 
-  it('(POST) Log In', () => {
+  it('(POST) Log In with wrong password', () => {
     return request(app.getHttpServer())
       .post('/auth/login')
       .send({
