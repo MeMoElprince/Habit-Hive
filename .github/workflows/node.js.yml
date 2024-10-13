@@ -34,11 +34,8 @@ jobs:
 
     runs-on: self-hosted
 
-    strategy:
-      matrix:
-        node-version: [22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
+    needs: build
+    
     steps:
     - run: |
         touch .test.env
