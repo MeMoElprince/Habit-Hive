@@ -28,7 +28,7 @@ jobs:
     - run: npm run build --if-present
     - run: |
         touch .prod.env
-        echo "${{ secrets.PROD_ENV_FILE }}" > .prod.env
+        echo "${{ secrets.PROD_ENV_FILE }}" > .prod.env 
 
   test:
 
@@ -37,6 +37,7 @@ jobs:
     needs: build
     
     steps:
+    - uses: actions/checkout@v4
     - run: |
         touch .test.env
         echo "${{ secrets.TEST_ENV_FILE }}" > .test.env
