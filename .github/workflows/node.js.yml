@@ -39,15 +39,15 @@ jobs:
 
     steps:
 
-      - name: Generate prisma client for prod
-      - run: npm run prisma:generate:prod
-      - name: Run migration for prod
-      - run: npm run prisma:migrate:prod
+    - name: Generate prisma client for prod
+    - run: npm run prisma:generate:prod
+    - name: Run migration for prod
+    - run: npm run prisma:migrate:prod
 
-      - name: Generate prisma client for test
-      - run: npm run prisma:generate:test
-      - name: Run migration for test
-      - run: npm run prisma:migrate:test
+    - name: Generate prisma client for test
+    - run: npm run prisma:generate:test
+    - name: Run migration for test
+    - run: npm run prisma:migrate:test
 
   test:
 
