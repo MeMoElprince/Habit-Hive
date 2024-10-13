@@ -27,17 +27,15 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: |
-        touch .prod.env
-        echo "${{ secrets.PROD_ENV_FILE }}" > .prod.env
+        touch .prod.env .test.env
+        echo "${{ secrets.PROD_ENV_FILE }}" > .prod.env 
+        echo "${{ secrets.TEST_ENV_FILE }}" > .test.env 
 
   test:
 
     runs-on: self-hosted
 
     needs: build
-    
+
     steps:
-    - run: |
-        touch .test.env
-        echo "${{ secrets.TEST_ENV_FILE }}" > .test.env
     - run: npm run test:e2e
