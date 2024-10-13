@@ -8,7 +8,10 @@ import { UserModule } from './user/user.module';
   imports: [
     PrismaModule,
     AuthModule,
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      envFilePath: `.${process.env.NODE_ENV}.env`,
+      isGlobal: true,
+    }),
     UserModule,
   ],
   controllers: [],

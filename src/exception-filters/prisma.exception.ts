@@ -14,7 +14,6 @@ export class PrismaExceptionFilter implements ExceptionFilter {
 
     switch (exception.code) {
       case 'P2025': {
-        console.log('P2025 EXCEPTION');
         response.status(404).json({
           statusCode: 404,
           message: exception.message,
