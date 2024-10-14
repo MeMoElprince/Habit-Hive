@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "name": "node-server",
+      "script": "npm",
+      "args": "run start:prod"
+    }
+  ]
+}
