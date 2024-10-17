@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { PrismaExceptionFilter } from './exception-filters/prisma.exception';
+import { ResponseFormatInterceptor } from './interceptors/response-format.interceptor';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
@@ -16,6 +17,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   app.useGlobalFilters(new PrismaExceptionFilter());
+  app.useGlobalInterceptors(new ResponseFormatInterceptor());
 
   const configService = new ConfigService();
 
