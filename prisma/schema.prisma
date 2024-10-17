@@ -14,23 +14,28 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  joinedAt DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  joinedAt  DateTime @default(now())
   createdAt DateTime @default(now())
-  updateAt DateTime @updatedAt
-  status Status @default(Active)
-  role Role @default(user)
+  updateAt  DateTime @updatedAt
+  status    Status   @default(Active)
+  role      Role     @default(user)
 
-  name String
+  name  String
   email String @unique
-  hash String
+  hash  String
 
-  bio String?
+  bio          String?
   facebookLink String?
-  twitterLink String?
-  otp String?
+  twitterLink  String?
+  otp          String?
 
   numberOfBadges Int?
+  Habit          Habit[]
+  Goal           Goal[]
+  Badge          Badge[]
+  Progress       Progress[]
+  TrackedHabit   TrackedHabit[]
 }
 
 enum Role {
@@ -41,4 +46,117 @@ enum Role {
 enum Status {
   Active
   Inavtive
+}
+
+model Habit {
+  id               Int       @id @default(autoincrement()) // Primary Key
+  user_id          Int // Foreign Key (Assumes you have a User model)
+  name             String // Habit name
+  is_public        Boolean   @default(false) // Whether the habit is public
+  is_targeted      Boolean   @default(false) // Whether the habit is targeted
+  is_completed     Boolean   @default(false) // Whether the habit is completed
+  category_id      Int // Category of the habit
+  target           Int? // Target value (e.g., number of repetitions)
+  target_unit      String? // Unit for the target (e.g., "km", "ounces")
+  amount_completed Int? // amount_completed earned for this habit
+  progress_percent String? // progress_percent percent made on that 
+  repeat           Int       @default(1) // Repeat interval (e.g., daily, weekly)
+  start_date       DateTime // Start date of the habit
+  end_date         DateTime? // End date of the habit (optional)
+  goal_id          Int? // Foreign Key to the Goal model (optional, assuming you have a Goal model)
+  updated_at       DateTime  @updatedAt // Timestamp for when the record was last updated
+  created_at       DateTime  @default(now()) // Timestamp for when the record was created
+
+  // Relations
+  user         User           @relation(fields: [user_id], references: [id])
+  goal         Goal?          @relation(fields: [goal_id], references: [id])
+  category     Category       @relation(fields: [category_id], references: [id])
+  Progress     Progress[]
+  TrackedHabit TrackedHabit[]
+
+  @@map("habits") // Table name in the database
+}
+
+model Goal {
+  id               Int       @id @default(autoincrement()) // Primary Key
+  user_id          Int // Foreign Key (Assumes you have a User model)
+  name             String // Goal name
+  is_public        Boolean   @default(false) // Whether the goal is public
+  target           Int? // Target value (e.g., number of repetitions)
+  target_unit      String? // Unit for the target (e.g., "times", "hours")
+  amount_completed Int? // amount_completed associated with this goal
+  progress_percent String? // progress_percent tracking (optional)
+  start_date       DateTime // Start date of the goal
+  end_date         DateTime? // End date of the goal (optional)
+  updated_at       DateTime  @updatedAt // Timestamp for when the record was last updated
+  created_at       DateTime  @default(now()) // Timestamp for when the record was created
+
+  // Relations
+  user  User    @relation(fields: [user_id], references: [id])
+  Habit Habit[]
+  Badge Badge[]
+
+  @@map("goals") // Table name in the database
+}
+
+model Category {
+  id          Int     @id @default(autoincrement())
+  name        String
+  icon        String
+  description String?
+  Habit       Habit[]
+}
+
+model Badge {
+  id          Int      @id @default(autoincrement()) // Primary Key
+  user_id     Int // Foreign Key to the User model
+  name        String // Badge name
+  description String // Description of the badge
+  goal_id     Int // Foreign Key to the Goal model
+  icon        String // Icon link for the badge
+  created_at  DateTime @default(now()) // Date when the badge was rewarded
+
+  // Relations
+  user User  @relation(fields: [user_id], references: [id])
+  goal Goal? @relation(fields: [goal_id], references: [id])
+
+  @@map("badges") // Table name in the database
+}
+
+model Progress {
+  id               Int      @id @default(autoincrement()) // Primary Key
+  user_id          Int // Foreign Key to the User model
+  habit_id         Int // Foreign Key to the Habit model
+  target           Int? // Target value (e.g., number of repetitions)
+  target_unit      String? // Unit for the target (e.g., "km", "ounces")
+  amount_completed Int? // amount_completed earned for this habit
+  progress_percent String // Actual progress made
+  updated_at       DateTime @updatedAt // Timestamp for when the record was last updated
+  created_at       DateTime @default(now()) // Timestamp for when the record was created
+
+  // Relations
+  user  User  @relation(fields: [user_id], references: [id])
+  habit Habit @relation(fields: [habit_id], references: [id])
+
+  @@map("progress") // Table name in the database
+}
+
+model TrackedHabit {
+  id               Int      @id @default(autoincrement()) // Primary Key
+  user_id          Int // Foreign Key to the User model
+  habit_id         Int // Foreign Key to the Habit model
+  name             String // Name of the habit
+  is_targeted      Boolean  @default(false) // Whether the habit has a target to achieve
+  target           Int? // Target value (optional, if the habit is targeted)
+  target_unit      String? // Unit of the target (e.g., "times", "hours")
+  amount_completed Int? // amount_completed earned for tracking the habit
+  progress_percent String // Progress made on that day
+  updated_at       DateTime @updatedAt // Timestamp for the last update
+  created_at       DateTime @default(now()) // Timestamp for when the habit tracking was created
+
+  // Relations
+  user  User  @relation(fields: [user_id], references: [id])
+  habit Habit @relation(fields: [habit_id], references: [id])
+
+  @@map("tracked_habits") // Table name in the database
 }
