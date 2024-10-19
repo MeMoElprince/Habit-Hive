@@ -36,6 +36,7 @@ model User {
   Badge          Badge[]
   Progress       Progress[]
   TrackedHabit   TrackedHabit[]
+  Habits_Goals   Habits_Goals[]
 }
 
 enum Role {
@@ -63,16 +64,15 @@ model Habit {
   repeat           Int       @default(1) // Repeat interval (e.g., daily, weekly)
   start_date       DateTime // Start date of the habit
   end_date         DateTime? // End date of the habit (optional)
-  goal_id          Int? // Foreign Key to the Goal model (optional, assuming you have a Goal model)
   updated_at       DateTime  @updatedAt // Timestamp for when the record was last updated
   created_at       DateTime  @default(now()) // Timestamp for when the record was created
 
   // Relations
   user         User           @relation(fields: [user_id], references: [id])
-  goal         Goal?          @relation(fields: [goal_id], references: [id])
   category     Category       @relation(fields: [category_id], references: [id])
   Progress     Progress[]
   TrackedHabit TrackedHabit[]
+  Habits_Goals Habits_Goals[]
 
   @@map("habits") // Table name in the database
 }
@@ -92,11 +92,25 @@ model Goal {
   created_at       DateTime  @default(now()) // Timestamp for when the record was created
 
   // Relations
-  user  User    @relation(fields: [user_id], references: [id])
-  Habit Habit[]
-  Badge Badge[]
+  user         User           @relation(fields: [user_id], references: [id])
+  Badge        Badge[]
+  Habits_Goals Habits_Goals[]
 
   @@map("goals") // Table name in the database
+}
+
+model Habits_Goals {
+  id       Int @id @default(autoincrement()) // Primary Key
+  user_id  Int // Foreign Key of user table
+  habit_id Int //Foreign Key of habit table
+  goal_id  Int // Foreign Key of goal table
+
+  // Relations
+  user  User  @relation(fields: [user_id], references: [id])
+  habit Habit @relation(fields: [habit_id], references: [id])
+  goal  Goal  @relation(fields: [goal_id], references: [id])
+
+  @@map("habits_goals")
 }
 
 model Category {

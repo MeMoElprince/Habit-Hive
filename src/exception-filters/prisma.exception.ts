@@ -12,6 +12,7 @@ export class PrismaExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
 
+    console.error(exception.message);
     switch (exception.code) {
       case 'P2025': {
         response.status(404).json({

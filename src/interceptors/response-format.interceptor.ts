@@ -13,6 +13,7 @@ export class ResponseFormatInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((data) => ({
         message: 'Request successful',
+        ...(Array.isArray(data) ? { count: data.length } : {}),
         data: data,
       })),
     );
