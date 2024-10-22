@@ -15,13 +15,14 @@ import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
 import { Role } from 'src/auth/enum/role.enum';
 import { Roles } from 'src/auth/decorator/roles.decorator';
-import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { GetUser } from 'src/auth/decorator/get-user.decorator';
 import { User } from '@prisma/client';
 
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 @Roles(Role.User)
 @ApiBearerAuth('default')
+@ApiTags('Habit')
 @Controller('habits')
 export class HabitsController {
   constructor(private readonly habitsService: HabitsService) {}

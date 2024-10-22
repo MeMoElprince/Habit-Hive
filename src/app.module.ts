@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { HabitsModule } from './habits/habits.module';
+import { GoalsModule } from './goals/goals.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { HabitsModule } from './habits/habits.module';
     }),
     UserModule,
     HabitsModule,
+    GoalsModule,
   ],
   controllers: [],
   providers: [],
